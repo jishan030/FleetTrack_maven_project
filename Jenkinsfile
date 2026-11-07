@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -17,6 +18,25 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                dir('backend') {
+                    withCredentials([
+                        string(credentialsId: 'sonarqube-token',
+                               variable: 'SONAR_TOKEN')
+                    ]) {
+                        sh '''
+                            mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                            -Dsonar.projectKey=jishan030_FleetTrack_maven_project \
+                            -Dsonar.organization=jishan030 \
+                            -Dsonar.host.url=https://sonarcloud.io \
+                            -Dsonar.token="$SONAR_TOKEN"
+                        '''
+                    }
+                }
+            }
+        }
+
         stage('Frontend Build') {
             steps {
                 dir('frontend') {
@@ -28,8 +48,9 @@ pipeline {
 
         stage('Build Completed') {
             steps {
-                echo 'FleetTrack CI Pipeline Completed Successfully!'
+                echo 'FleetTrack CI + SonarQube Analysis Completed!'
             }
         }
     }
 }
+```
