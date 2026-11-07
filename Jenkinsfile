@@ -49,5 +49,14 @@ pipeline {
                 echo 'FleetTrack CI + SonarQube Analysis Completed!'
             }
         }
+
+        stage('Package Release') {
+            steps {
+                archiveArtifacts artifacts: 'backend/target/*.jar,frontend/dist/**',
+                                 fingerprint: true
+
+                echo 'FleetTrack release artifacts packaged successfully!'
+            }
+        }
     }
 }
