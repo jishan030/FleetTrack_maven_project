@@ -1,4 +1,3 @@
-```groovy
 pipeline {
     agent any
 
@@ -22,8 +21,7 @@ pipeline {
             steps {
                 dir('backend') {
                     withCredentials([
-                        string(credentialsId: 'sonarqube-token',
-                               variable: 'SONAR_TOKEN')
+                        string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')
                     ]) {
                         sh '''
                             mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
@@ -53,4 +51,3 @@ pipeline {
         }
     }
 }
-```
