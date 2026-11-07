@@ -1,175 +1,287 @@
-# 🚗 FleetTrack – AWS DevOps CI/CD Project
+# 🚗 FleetTrack – Vehicle Fleet Management System
 
-### Automating Cloud Infrastructure and CI/CD with AWS, Terraform, Jenkins & SonarQube
+### Java | Spring Boot | Maven | React | AWS | Terraform | Jenkins | SonarQube
 
-FleetTrack is a full-stack vehicle fleet management application developed to demonstrate practical **AWS Cloud Infrastructure Automation and DevOps CI/CD practices**.
+FleetTrack is a **Java-based Vehicle Fleet Management System** developed using Spring Boot and Maven, with a React.js frontend.
 
-The project combines a React frontend, Java Spring Boot backend, Terraform-based AWS infrastructure and a Jenkins CI/CD pipeline integrated with SonarQube Cloud for code quality analysis.
+The application is designed to organize and manage essential fleet operations, including vehicles, drivers, trips, and maintenance records.
 
-The primary objective is to understand how application code moves through a structured CI/CD workflow and how cloud infrastructure can be provisioned and managed using Infrastructure as Code (IaC).
+Alongside application development, this project demonstrates practical DevOps implementation using AWS, Terraform, Jenkins CI/CD, and SonarQube Cloud for automated build and code quality analysis.
 
 ---
 
 ## 📌 Project Overview
 
-FleetTrack provides a basic fleet management application with the following modules:
+Managing fleet operations involves maintaining vehicle information, tracking drivers, organizing trips, and keeping maintenance records.
 
-- **Dashboard:** Overview of fleet management information.
-- **Vehicle Management:** Manage vehicle records.
-- **Driver Management:** Manage driver information.
-- **Trip Management:** Organize trip records.
-- **Maintenance Records:** Maintain vehicle maintenance information.
+FleetTrack brings these essential management activities together in one application.
 
-The main focus of this project is not public application hosting. It is the implementation and understanding of DevOps tools, infrastructure automation and CI/CD workflows.
+### Core Modules
+
+| Module | Description |
+|---|---|
+| Dashboard | Overview of fleet management information |
+| Vehicle Management | Manage vehicle information and records |
+| Driver Management | Maintain driver information |
+| Trip Management | Organize and manage trip records |
+| Maintenance Records | Maintain vehicle maintenance information |
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Category | Technologies |
+### Application Development
+
+| Technology | Purpose |
 |---|---|
-| Frontend | React.js, Vite |
-| Backend | Java 21, Spring Boot |
-| Build Tool | Maven |
-| Version Control | Git, GitHub |
-| CI/CD | Jenkins |
-| Code Quality | SonarQube Cloud |
-| Infrastructure as Code | Terraform |
-| Cloud Platform | AWS |
-| Cloud Services | EC2, VPC, S3, CloudFront |
-| Operating System | Ubuntu Linux |
+| Java 21 | Backend programming language |
+| Spring Boot | Backend application framework |
+| Apache Maven | Dependency management and build automation |
+| React.js | Frontend development |
+| Vite | Frontend build tooling |
+
+### DevOps & Cloud
+
+| Technology | Purpose |
+|---|---|
+| Git & GitHub | Version control and source code management |
+| Jenkins | CI/CD pipeline automation |
+| SonarQube Cloud | Automated code quality analysis |
+| Terraform | Infrastructure as Code |
+| AWS EC2 | Cloud-based Jenkins environment |
+| AWS VPC | Cloud networking |
+| AWS S3 | Storage infrastructure |
+| AWS CloudFront | CDN infrastructure |
+| Ubuntu | Server operating system |
 
 ---
 
-## 🏗️ AWS Infrastructure Architecture
+## 🏗️ Application Architecture
 
-The project uses Terraform to provision and manage AWS infrastructure.
+FleetTrack follows a frontend-backend architecture.
+
+```text
+          FLEETTRACK APPLICATION
+          
+       +----------------------+
+       |    React Frontend    |
+       |                      |
+       |      Vite            |
+       +----------+-----------+
+                  |
+                  | REST API
+                  |
+                  v
+       +----------------------+
+       |  Spring Boot Backend |
+       |                      |
+       |       Java 21        |
+       +----------+-----------+
+                  |
+                  v
+       +----------------------+
+       |   Maven Build System |
+       |                      |
+       | Dependency Management|
+       | Compilation & JAR    |
+       +----------------------+
+```
+
+The React frontend communicates with the Spring Boot backend through REST APIs.
+
+---
+
+## ☁️ AWS Infrastructure
+
+AWS infrastructure for the project was provisioned using Terraform.
 
 ### Infrastructure Components
 
-| AWS Service | Purpose |
+| AWS Service | Implementation |
 |---|---|
-| Amazon VPC | Isolated cloud networking |
+| Amazon VPC | Isolated networking environment |
 | Public Subnet | Public network connectivity |
 | Internet Gateway | Internet connectivity for the VPC |
-| Security Group | Network access control |
+| Security Group | Network traffic control |
 | Amazon EC2 | Jenkins and CI/CD environment |
 | Amazon S3 | Frontend storage infrastructure |
 | Amazon CloudFront | CDN infrastructure |
 
-Infrastructure configuration is maintained using Terraform, making cloud resource provisioning more organized and repeatable.
+Infrastructure resources were managed through Terraform configuration files.
 
 ---
 
-## 🔄 CI/CD Pipeline Workflow
+## ⚙️ Maven Build Management
 
-The Jenkins pipeline automates the major build and release preparation activities.
+Apache Maven is used to manage the Java backend project.
+
+Maven handles:
+
+- Project dependencies.
+- Build lifecycle.
+- Java compilation.
+- Application packaging.
+- JAR artifact generation.
+
+### Backend Build
+
+```bash
+cd backend
+
+mvn clean package -DskipTests
+```
+
+The generated Spring Boot JAR is available inside:
+
+```text
+backend/target/
+```
+
+---
+
+## 🔄 Jenkins CI/CD Pipeline
+
+Jenkins automates the application build and release packaging workflow.
+
+The pipeline is integrated with GitHub and SonarQube Cloud.
 
 ### Pipeline Architecture
 
 ```text
-              Developer
-                  |
-                  |
-                  v
-             GitHub Repo
-                  |
-                  v
-             Jenkins CI/CD
-                  |
-                  v
-             Source Checkout
-                  |
-          +-------+-------+
-          |               |
-          v               v
-     Backend Build   Frontend Build
-       (Maven)        (React/Vite)
-          |
-          v
-    SonarQube Cloud
-     Code Analysis
-          |
-          v
-     Build Validation
-          |
-          v
-     Release Packaging
-          |
-          v
-    Archive Artifacts
-          |
-          v
-      Build Complete
+             GitHub Repository
+                     |
+                     v
+                Jenkins
+                     |
+                     v
+               Git Checkout
+                     |
+          +----------+----------+
+          |                     |
+          v                     |
+     Backend Build              |
+       (Maven)                  |
+          |                     |
+          v                     |
+    SonarQube Cloud             |
+    Code Analysis               |
+          |                     |
+          +----------+----------+
+                     |
+                     v
+              Frontend Build
+               (React/Vite)
+                     |
+                     v
+              Build Completed
+                     |
+                     v
+              Release Packaging
+                     |
+                     v
+              Archive Artifacts
 ```
 
-### Pipeline Stages
+### Jenkins Pipeline Stages
 
-**1. Checkout**
+**1. Source Code Checkout**
 
-Jenkins retrieves the latest source code from the GitHub repository.
+Jenkins fetches the latest source code from the GitHub repository.
 
 **2. Backend Build**
 
-Maven builds the Spring Boot application and generates the JAR artifact.
+Maven compiles and packages the Spring Boot backend application.
 
 **3. SonarQube Analysis**
 
-SonarQube Cloud analyzes the backend source code to provide code quality insights.
+SonarQube Cloud performs automated source code quality analysis.
 
 **4. Frontend Build**
 
-Jenkins installs frontend dependencies and creates a production build using Vite.
+Jenkins installs frontend dependencies and generates the production build using Vite.
 
 **5. Release Packaging**
 
-Jenkins archives the generated backend JAR and frontend build files as pipeline artifacts.
+Jenkins archives the generated backend JAR and frontend build files.
 
-**6. Build Completion**
+**6. Artifact Archiving**
 
-The pipeline completes after successful build, analysis and artifact archiving.
+Build artifacts are stored in Jenkins for future reference.
+
+### Jenkinsfile
+
+The pipeline is defined using a declarative Jenkinsfile stored in the root directory of the repository.
 
 ---
 
-## 🧪 SonarQube Cloud Integration
+## 🔍 SonarQube Cloud Integration
 
-SonarQube Cloud is integrated into the Jenkins pipeline for automated code quality analysis.
+SonarQube Cloud is integrated into the Jenkins pipeline to analyze backend source code.
 
-Key implementation details:
+### Implementation
 
-- Jenkins credentials integration for secure token access.
 - SonarQube Cloud project integration.
-- Automated analysis during the pipeline.
+- Jenkins credentials for secure token management.
+- Automated Maven-based SonarQube analysis.
 - Code quality reporting.
+- CI pipeline integration.
+
+This integration helps identify code quality issues during the development workflow.
 
 ---
 
-## ⚙️ Terraform Infrastructure Automation
+## 🏗️ Terraform – Infrastructure as Code
 
-Terraform is used to define and manage AWS infrastructure through configuration files.
+Terraform is used to provision and manage the AWS infrastructure.
 
 ### Terraform Workflow
 
 ```text
-Terraform Configuration
-          |
-          v
-    terraform init
-          |
-          v
-    terraform validate
-          |
-          v
-      terraform plan
-          |
-          v
-      terraform apply
-          |
-          v
-   AWS Infrastructure
+      Terraform Configuration
+                |
+                v
+          terraform init
+                |
+                v
+        terraform validate
+                |
+                v
+          terraform plan
+                |
+                v
+         terraform apply
+                |
+                v
+        AWS Infrastructure
 ```
 
-Terraform helps manage infrastructure in a consistent and repeatable way.
+### Common Terraform Commands
+
+Initialize the working directory:
+
+```bash
+terraform init
+```
+
+Validate configuration:
+
+```bash
+terraform validate
+```
+
+Review infrastructure changes:
+
+```bash
+terraform plan
+```
+
+Provision infrastructure:
+
+```bash
+terraform apply
+```
+
+Review the execution plan before applying infrastructure changes.
 
 ---
 
@@ -183,112 +295,127 @@ FleetTrack/
 ├── backend/
 │   ├── src/
 │   ├── pom.xml
-│   └── ...
+│   └── target/
 │
 ├── frontend/
 │   ├── src/
+│   ├── public/
 │   ├── package.json
-│   └── ...
+│   └── vite.config.js
 │
 ├── terraform/
-│   ├── main.tf
-│   └── ...
+│   └── main.tf
 │
 ├── Jenkinsfile
+│
 ├── .gitignore
+│
 └── README.md
 ```
 
 ---
 
-## 🚀 Tools and Commands
+## 🚀 Running the Application Locally
 
-### Backend Build
+### Prerequisites
+
+Install the following tools:
+
+- Java JDK 21
+- Apache Maven
+- Node.js and npm
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/jishan030/FleetTrack_maven_project.git
+```
+
+```bash
+cd FleetTrack_maven_project
+```
+
+### 2. Run the Backend
 
 ```bash
 cd backend
 mvn clean package -DskipTests
 ```
 
-### Frontend Build
+Run the generated JAR:
+
+```bash
+java -jar target/fleettrack-backend-0.0.1-SNAPSHOT.jar
+```
+
+### 3. Run the Frontend
+
+Open another terminal:
 
 ```bash
 cd frontend
-npm ci
-npm run build
+npm install
+npm run dev
 ```
 
-### Terraform Commands
-
-```bash
-cd terraform
-
-terraform init
-
-terraform validate
-
-terraform plan
-```
-
-Review the Terraform plan before applying infrastructure changes.
-
-### Git Commands
-
-```bash
-git add .
-git commit -m "Update FleetTrack project"
-git push origin main
-```
+The frontend development server will display its local address in the terminal.
 
 ---
 
-## 🎯 Key DevOps Learnings
+## 🎯 Key Learning Outcomes
 
-Through this project, I gained practical experience with:
+This project provided practical experience in:
 
-- AWS cloud infrastructure provisioning.
-- Terraform Infrastructure as Code.
-- Jenkins pipeline configuration.
-- CI/CD workflow implementation.
-- Java Spring Boot application builds.
-- React frontend production builds.
-- SonarQube Cloud integration.
-- Jenkins credentials management.
-- Build artifact archiving.
-- AWS infrastructure lifecycle management.
-- Troubleshooting Jenkins executor and disk-space issues.
+- Developing a Java-based application using Spring Boot.
+- Managing Java dependencies and builds with Maven.
+- Understanding Maven build and packaging lifecycle.
+- Working with React and Vite.
+- Managing source code through Git and GitHub.
+- Configuring Jenkins declarative pipelines.
+- Integrating SonarQube Cloud with Jenkins.
+- Automating backend and frontend builds.
+- Archiving release artifacts.
+- Provisioning AWS infrastructure using Terraform.
+- Managing cloud infrastructure lifecycle.
+- Troubleshooting Jenkins build, executor and disk-space issues.
 
 ---
 
-## 📌 Project Status
+## 📊 Project Status
 
 | Component | Status |
 |---|---|
-| React Frontend | Completed |
-| Spring Boot Backend | Completed |
-| AWS Infrastructure with Terraform | Implemented |
+| Java Backend | Completed |
+| Spring Boot | Implemented |
+| Maven Build | Completed |
+| React Frontend | Implemented |
+| AWS Infrastructure | Provisioned using Terraform |
 | Jenkins CI Pipeline | Completed |
 | SonarQube Cloud Integration | Completed |
-| Release Packaging | Completed |
+| Frontend Build Automation | Completed |
+| Release Artifact Packaging | Completed |
 | GitHub Integration | Completed |
 | Public Website Hosting | Not Included |
-| Prometheus & Grafana | Not Included |
+| Production Application Deployment | Not Included |
 
-**Note:** The project demonstrates CI, code quality analysis and release artifact packaging. Public application hosting and production application deployment are outside the project scope.
-
-AWS infrastructure resources are intended to be destroyed after the practical work to avoid unnecessary cloud costs.
+**Project Scope:** This project focuses on Java application development, Maven build automation, AWS infrastructure provisioning and CI/CD implementation. Release packaging is automated through Jenkins; public production hosting and application deployment are outside the current scope.
 
 ---
 
 ## 👨‍💻 Author
 
-**Jishan Khan**
+### Jishan Khan
+**Aspiring AWS & DevOps Engineer**
 
-Aspiring AWS & DevOps Engineer
+GitHub: [@jishan030](https://github.com/jishan030)
 
-- GitHub: [@jishan030](https://github.com/jishan030)
-- Project Repository: [FleetTrack](https://github.com/jishan030/FleetTrack_maven_project.git)
+Project Repository:
+
+[ FleetTrack – GitHub Repository](https://github.com/jishan030/FleetTrack_maven_project)
 
 ---
 
-### ⭐ If you find this project useful, feel free to explore the repository!
+### ⭐ Thank You for Visiting!
+
+Feel free to explore the repository and learn from the implementation.
